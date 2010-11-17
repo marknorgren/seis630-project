@@ -1,3 +1,12 @@
+--Project Views
+--SEIS630
+--
+--Team 7
+--Faisal Ahmed
+--Mark Norgren
+--Mohammad Rahman
+
+
 --1. This view returns the name of every entity and for that the name of every 
 --attribute the entity contains and the data type for that attribute for 
 --all entities that have at least 3 attributes.
@@ -41,13 +50,20 @@ WHERE lower(RL_card)='m';
 
 --4.	AttDatatype_Domain: This view returns the name of each attribute and the 
 --data type it has only for those attributes that also have a domain.
+	
 CREATE VIEW AttDatatype_Domain(AttrName, AttrType)
 as
 SELECT a.aname, i.II_DATATYPE
 from ATTR_TYPE a, IS_IN i
 where 
-	a.aname = i.aname AND
-	i.II_DOMAIN != NULL;
+ a.aname = i.aname AND
+ i.II_DOMAIN != NULL
+union 
+SELECT aa.aname, DV.DV_DATATYPE
+from ATTR_TYPE aa, Derives DV
+where 
+ aa.aname = DV.aname AND
+ DV.DV_DOMAIN != NULL;
 
 
 
