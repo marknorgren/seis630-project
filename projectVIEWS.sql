@@ -12,12 +12,12 @@
 --all entities that have at least 3 attributes.
 CREATE VIEW entity_3_Att (Ename, Aname, Adata_type)
 AS
-SELECT ename, aname, cn_datatype
-from Contains
-where exists (
-                select count(aname) 
+SELECT e.ename, cn.aname, cn.cn_datatype
+from Contains cn, entity_type e
+where lower(e.ename)=lower(cn.ename)
+and  exists (
+                select count(distinct aname) 
                 from contains
-                group by aname
                 having count(aname)>2
                 );
 
