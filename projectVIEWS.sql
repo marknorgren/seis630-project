@@ -67,7 +67,6 @@ where
 
 
 
-
 --5.	EntKey: This view prints the name of each entity, the attributes that form 
 --a primary or candidate key for the entity, and key type.
 CREATE VIEW EntKey(Ename, Aname,Key_Type)
