@@ -189,13 +189,14 @@ Insert into CONTAINS(ANAME, ENAME, CN_DATATYPE, CN_DOMAIN, CN_IS_KEY, CN_KEYTYPE
 --CONTAINS - Grant
 Insert into CONTAINS(ANAME, ENAME, CN_DATATYPE, CN_DOMAIN, CN_IS_KEY, CN_KEYTYPE, CN_LENGTH, CN_PRECISION, CN_SCALE,CN_MULTIVALUE)
 	values('Date','Grant', 'Date', 'null', 'n', null, 15, null, null, null);  --what should date length be?
+
+Insert into CONTAINS(ANAME, ENAME, CN_DATATYPE, CN_DOMAIN, CN_IS_KEY, CN_KEYTYPE, CN_LENGTH, CN_PRECISION, CN_SCALE,CN_MULTIVALUE)
+	values('Title','Grant', 'Text', 'varchar(27)', 'y', 'Text', 27, null, null, null);	
 	
+Insert into CONTAINS(ANAME, ENAME, CN_DATATYPE, CN_DOMAIN,  CN_IS_KEY, CN_KEYTYPE, CN_LENGTH, CN_PRECISION, CN_SCALE,CN_MULTIVALUE)
+	         values('Title','Amt', 'Amount'  ,'decimal(20,2)', 'n', 'Text'      , 20        , 2           , null    , null);	
 
 	
-
-
-
-
 
 
 
