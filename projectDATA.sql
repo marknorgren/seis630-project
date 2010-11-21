@@ -77,25 +77,19 @@ Insert into SPECIALIZATION(SNAME, ENAME, STOTAL, SOVERLAPPING) values ('Studet',
 --------------------------------------------------------------------------------
 
 --IS_IN
-Insert into 
-
+Insert into
 IS_IN(ANAME, ATT_ANAME,II_DATA_TYPE,II_DOMAIN,II_LENGTH,II_PRECISION,II_SCALE) 
-
 values('FNAME', 'NAME', 'char(10)', 'short_text', 10, null, null);
 
-
 Insert into 
-
 IS_IN(ANAME, ATT_ANAME,II_DATA_TYPE,II_DOMAIN,II_LENGTH,II_PRECISION,II_SCALE) 
-
 values('MINIT', 'NAME', 'char(1)', null, 1, null, null);
 
-
 Insert into 
-
 IS_IN(ANAME, ATT_ANAME,II_DATA_TYPE,II_DOMAIN,II_LENGTH,II_PRECISION,II_SCALE) 
-
 values('LNAME', 'NAME', 'char(10)', 'short_text', 10, null, null);
+
+
 
 
 --Specialization
@@ -149,14 +143,56 @@ Insert into ATTR_TYPE values('CName');
 Insert into ATTR_TYPE values('Dname');
 Insert into ATTR_TYPE values('No_of_Faculty');
 
+
+--CONTAINS - PERSON
 Insert into CONTAINS(ANAME, ENAME, CN_DATATYPE, CN_DOMAIN, CN_IS_KEY, CN_KEYTYPE, CN_LENGTH, CN_PRECISION, CN_SCALE,CN_MULTIVALUE) 
      values('SSN','Person', 'int', 'num', 'y', 'PK', 15, null, null,null);
 
 Insert into CONTAINS(ANAME, ENAME, CN_DATATYPE, CN_DOMAIN, CN_IS_KEY, CN_KEYTYPE, CN_LENGTH, CN_PRECISION, CN_SCALE,CN_MULTIVALUE)
-values('Age','Person', 'int', 'num', 'n', null, 15, null, null,null);
+	values('Age','Person', 'int', 'num', 'n', null, 15, null, null,null);
 
 Insert into CONTAINS(ANAME, ENAME, CN_DATATYPE, CN_DOMAIN, CN_IS_KEY, CN_KEYTYPE, CN_LENGTH, CN_PRECISION, CN_SCALE,CN_MULTIVALUE)
-values('DOB','Person', 'date', 'num', 'n', null, 15, null, null,null);
+	values('DOB','Person', 'date', 'num', 'n', null, 15, null, null,null); --what should date length be?
+	
+Insert into CONTAINS(ANAME, ENAME, CN_DATATYPE, CN_DOMAIN, CN_IS_KEY, CN_KEYTYPE, CN_LENGTH, CN_PRECISION, CN_SCALE,CN_MULTIVALUE)
+	values('DOB','Person', 'date', 'num', 'n', null, 15, null, null,null);
+
+Insert into CONTAINS(ANAME, ENAME, CN_DATATYPE, CN_DOMAIN, CN_IS_KEY, CN_KEYTYPE, CN_LENGTH, CN_PRECISION, CN_SCALE,CN_MULTIVALUE)
+	values('Street','Person', 'char(10)', 'short_text', 'n', null, 10, null, null,null);
+	
+Insert into CONTAINS(ANAME, ENAME, CN_DATATYPE, CN_DOMAIN, CN_IS_KEY, CN_KEYTYPE, CN_LENGTH, CN_PRECISION, CN_SCALE,CN_MULTIVALUE)
+	values('Street','Person', 'char(10)', 'short_text', 'n', null, 10, null, null,null);
+
+Insert into CONTAINS(ANAME, ENAME, CN_DATATYPE, CN_DOMAIN, CN_IS_KEY, CN_KEYTYPE, CN_LENGTH, CN_PRECISION, CN_SCALE,CN_MULTIVALUE)
+	values('City','Person', 'char(10)', 'short_text', 'n', null, 10, null, null,null);
+
+Insert into CONTAINS(ANAME, ENAME, CN_DATATYPE, CN_DOMAIN, CN_IS_KEY, CN_KEYTYPE, CN_LENGTH, CN_PRECISION, CN_SCALE,CN_MULTIVALUE)
+	values('State','Person', 'char(2)', 'null', 'n', null, 2, null, null,null);
+
+Insert into CONTAINS(ANAME, ENAME, CN_DATATYPE, CN_DOMAIN, CN_IS_KEY, CN_KEYTYPE, CN_LENGTH, CN_PRECISION, CN_SCALE,CN_MULTIVALUE)
+	values('Zip','Person', 'char(2)', 'null', 'n', null, 2, null, null,null);
+	
+Insert into CONTAINS(ANAME, ENAME, CN_DATATYPE, CN_DOMAIN, CN_IS_KEY, CN_KEYTYPE, CN_LENGTH, CN_PRECISION, CN_SCALE,CN_MULTIVALUE)
+	values('Zip','Person', 'char(2)', 'null', 'n', null, 2, null, null,null);
+	
+--CONTAINS - Student
+Insert into CONTAINS(ANAME, ENAME, CN_DATATYPE, CN_DOMAIN, CN_IS_KEY, CN_KEYTYPE, CN_LENGTH, CN_PRECISION, CN_SCALE,CN_MULTIVALUE)
+	values('Degree','Student', 'char(3)', 'null', 'n', null, 3, null, null,'y');
+
+--CONTAINs - Faculty
+Insert into CONTAINS(ANAME, ENAME, CN_DATATYPE, CN_DOMAIN, CN_IS_KEY, CN_KEYTYPE, CN_LENGTH, CN_PRECISION, CN_SCALE,CN_MULTIVALUE)
+	values('Salary','Faculty', 'decimal(10,2)', 'null', 'n', null, 10, 2, null, null);
+	
+Insert into CONTAINS(ANAME, ENAME, CN_DATATYPE, CN_DOMAIN, CN_IS_KEY, CN_KEYTYPE, CN_LENGTH, CN_PRECISION, CN_SCALE,CN_MULTIVALUE)
+	values('Is_tenured','Faculty', 'boolean', 'null', 'n', null, 1, null, null, null);
+	
+--CONTAINS - Grant
+Insert into CONTAINS(ANAME, ENAME, CN_DATATYPE, CN_DOMAIN, CN_IS_KEY, CN_KEYTYPE, CN_LENGTH, CN_PRECISION, CN_SCALE,CN_MULTIVALUE)
+	values('Date','Grant', 'Date', 'null', 'n', null, 15, null, null, null);  --what should date length be?
+	
+
+	
+
 
 
 
