@@ -14,10 +14,11 @@ CREATE VIEW entity_3_Att (Ename, Aname, Adata_type)
 AS
 SELECT e.ename, cn.aname, cn.cn_datatype
 from Contains cn, entity_type e
-where lower(e.ename)=lower(cn.ename)
+where lower(e.ename)=lower(cn.CN_ename)
 and  exists (
-                select count(distinct aname) 
-                from contains
+                select count(aname) 
+                from contains 
+                group by(aname)
                 having count(aname)>2
                 );
 
