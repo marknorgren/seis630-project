@@ -368,7 +368,7 @@ create index IS_USED_BY2_FK on IS_USED_BY (
 create table RELATES  (
    ENAME                CHAR(15)                         not null,
    RNAME                CHAR(15)                         not null,
-   RL_ROLE              CHAR(10)                         not null,
+   RL_ROLE              CHAR(15)                         not null,
    RL_CARD              CHAR(1),
    RL_MIN_CARD          CHAR(2),
    RL_MAX_CARD          CHAR(2),

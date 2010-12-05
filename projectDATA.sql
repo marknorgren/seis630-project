@@ -90,20 +90,20 @@ Insert into CONTAINS(ANAME, ENAME, CN_DATATYPE, CN_DOMAIN, CN_IS_KEY, CN_KEYTYPE
 Insert into CONTAINS(ANAME, ENAME, CN_DATATYPE, CN_DOMAIN, CN_IS_KEY, CN_KEYTYPE, CN_LENGTH, CN_PRECISION, CN_SCALE,CN_MULTIVALUE)
             	values('City','Person', 'char', 'short_text', 'n', null, 10, null, null,null);
 Insert into CONTAINS(ANAME, ENAME, CN_DATATYPE, CN_DOMAIN, CN_IS_KEY, CN_KEYTYPE, CN_LENGTH, CN_PRECISION, CN_SCALE,CN_MULTIVALUE)
-            	values('State','Person', 'char', 'null', 'n', null, 2, null, null,null);
+            	values('State','Person', 'char', null, 'n', null, 2, null, null,null);
 Insert into CONTAINS(ANAME, ENAME, CN_DATATYPE, CN_DOMAIN, CN_IS_KEY, CN_KEYTYPE, CN_LENGTH, CN_PRECISION, CN_SCALE,CN_MULTIVALUE)
             	values('Zip','Person', 'Integer', 'Num', 'n', null, 5, null, null,null);
 --CONTAINS - Student
 Insert into CONTAINS(ANAME, ENAME, CN_DATATYPE, CN_DOMAIN, CN_IS_KEY, CN_KEYTYPE, CN_LENGTH, CN_PRECISION, CN_SCALE,CN_MULTIVALUE)
-              values('Degree','Student', 'char', 'null', 'n', null, 3, null, null,'y');
+              values('Degree','Student', 'char', null, 'n', null, 3, null, null,'y');
 --CONTAINs - Faculty
 Insert into CONTAINS(ANAME, ENAME, CN_DATATYPE, CN_DOMAIN, CN_IS_KEY, CN_KEYTYPE, CN_LENGTH, CN_PRECISION, CN_SCALE,CN_MULTIVALUE)
-            	values('Salary','Faculty', 'decimal', 'null', 'n', null, 10, 10, 2, null);
+            	values('Salary','Faculty', 'decimal', null, 'n', null, 10, 10, 2, null);
 Insert into CONTAINS(ANAME, ENAME, CN_DATATYPE, CN_DOMAIN, CN_IS_KEY, CN_KEYTYPE, CN_LENGTH, CN_PRECISION, CN_SCALE,CN_MULTIVALUE)
-            	values('Is_tenured','Faculty', 'boolean', 'null', 'n', null, null, null, null, null);
+            	values('Is_tenured','Faculty', 'boolean', null, 'n', null, null, null, null, null);
 	--CONTAINS - Grant
 Insert into CONTAINS(ANAME, ENAME, CN_DATATYPE, CN_DOMAIN, CN_IS_KEY, CN_KEYTYPE, CN_LENGTH, CN_PRECISION, CN_SCALE,CN_MULTIVALUE)
-              values('Date','Grant', 'Date', 'null', 'n', null, null, null, null, null); 
+              values('Date','Grant', 'Date', null, 'n', null, null, null, null, null); 
 Insert into CONTAINS(ANAME, ENAME, CN_DATATYPE, CN_DOMAIN, CN_IS_KEY, CN_KEYTYPE, CN_LENGTH, CN_PRECISION, CN_SCALE,CN_MULTIVALUE)
             	values('Title','Grant', 'Text', 'varchar', 'y', 'Text', 27, null, null, null);	
 Insert into CONTAINS(ANAME, ENAME, CN_DATATYPE, CN_DOMAIN,  CN_IS_KEY, CN_KEYTYPE, CN_LENGTH, CN_PRECISION, CN_SCALE,CN_MULTIVALUE)
