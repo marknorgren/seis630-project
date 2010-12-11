@@ -1,0 +1,419 @@
+SQL> /* GROUP 07				     */
+SQL> /* Mark Norgren, Faisal Ahmed, Mohammad Rahman  */
+SQL> /* Project Queries SEIS630 - Fall 2010	     */
+SQL> -------------------------------------------------------------------------------
+SQL> Set echo on;
+SQL> set pagesize 160;
+SQL> set linesize 175;
+SQL> 
+SQL> 
+SQL> --Query 1
+SQL> --1.For relationships that connect more than two entities,
+SQL> --  print the relationship name and the entities they relate.
+SQL> -- hint: Your statement must count the number of entities that are connected to
+SQL> -- a relationship as opposed to using the value of the type attribute.
+SQL> 
+SQL> select rname, ename from relates where rname = (
+  2  	     select rname from relates group by rname having count(rname)>2
+  3  );
+
+RNAME           ENAME                                                                                                                                                          
+--------------- ---------------                                                                                                                                                
+Advises         Faculty                                                                                                                                                        
+Advises         Grad_student                                                                                                                                                   
+Advises         Grant                                                                                                                                                          
+
+SQL> 
+SQL> 
+SQL> -------------------------------------------------------------------------------
+SQL> --Query 2
+SQL> --2.Print the name of all relationships of degree three and the three entities
+SQL> --they relate. In this case, extra credit will be given if the name of the
+SQL> --relationship and the three entity names are printed on one line. Answers that
+SQL> --use three lines are accepted
+SQL> 
+SQL> select rname, ename
+  2  	     from relates
+  3  	     where rname = (
+  4  					     select rname
+  5  					     from relates
+  6  					     group by rname
+  7  					     having count(rname)=3
+  8  	     );
+
+RNAME           ENAME                                                                                                                                                          
+--------------- ---------------                                                                                                                                                
+Advises         Faculty                                                                                                                                                        
+Advises         Grad_student                                                                                                                                                   
+Advises         Grant                                                                                                                                                          
+
+SQL> 
+SQL> --Extra Credit - Display this all on one line.
+SQL> COLUMN Entities FORMAT A50;
+SQL> SELECT rname, wm_concat(ename) AS Entities
+  2  FROM   relates
+  3  GROUP BY rname
+  4  having count(rname)=3;
+
+RNAME           ENTITIES                                                                                                                                                       
+--------------- --------------------------------------------------                                                                                                             
+Advises         Faculty        ,Grant          ,Grad_student                                                                                                                   
+
+SQL> 
+SQL> ------------------------------------------------------------------------------------
+SQL> 
+SQL> 
+SQL> 
+SQL> --Query 3 (need verification)
+SQL> --Print the name of all binary relationships that have a cardinality --of M-to-M and have max
+SQL> --cardinality of M.
+SQL> 
+SQL> SELECT DISTINCT R.RNAME
+  2  FROM   RELATES RL, REL_TYPE R
+  3  WHERE LOWER(R.RTYPE)='binary'
+  4  		     AND     LOWER(RL.RL_CARD)='m'
+  5  		     AND     LOWER(RL.RL_MAX_CARD)='m'
+  6  		     AND     RL.RNAME=R.RNAME;
+
+RNAME                                                                                                                                                                          
+---------------                                                                                                                                                                
+TA's                                                                                                                                                                           
+
+SQL> 
+SQL> ------------------------------------------------------------------------------------
+SQL> 
+SQL> 
+SQL> --Query 4
+SQL> --4. For entities that have two or three attributes, print the name
+SQL> --of the entity and its attributes.
+SQL> SELECT ename, aname
+  2  FROM contains
+  3  WHERE ename IN(
+  4  				     select ename
+  5  		     from contains
+  6  		     group by ename
+  7  		     having count(ename)=any(2,3)
+  8  				     )
+  9  order by ename;
+
+ENAME           ANAME                                                                                                                                                          
+--------------- ---------------                                                                                                                                                
+Course          C#                                                                                                                                                             
+Course          CName                                                                                                                                                          
+Department      Dname                                                                                                                                                          
+Department      No_of_Faculty                                                                                                                                                  
+Faculty         Is_tenured                                                                                                                                                     
+Faculty         Salary                                                                                                                                                         
+Grant           Date                                                                                                                                                           
+Grant           Title                                                                                                                                                          
+Grant           Amt                                                                                                                                                            
+Section         Date                                                                                                                                                           
+Section         Sec#                                                                                                                                                           
+
+11 rows selected.
+
+SQL> 
+SQL> --returns 11 rows
+SQL> 
+SQL> ------------------------------------------------------------------------------------
+SQL> 
+SQL> 
+SQL> --Query 5
+SQL> --5. Print the name of all entities that participate in 2, 3, or 5 relationships.
+SQL> select ename, rname
+  2  	     from relates
+  3  	     where ename in(
+  4  					     select ename
+  5  					     from relates
+  6  					     group by ename
+  7  					     having count(ename)=any(2,3,5)
+  8  					     )
+  9  	     order by ename;
+
+ENAME           RNAME                                                                                                                                                          
+--------------- ---------------                                                                                                                                                
+College         Is_within                                                                                                                                                      
+College         Has_Dean                                                                                                                                                       
+Course          Has                                                                                                                                                            
+Course          Teaches                                                                                                                                                        
+Course          Offers                                                                                                                                                         
+Faculty         Works_in                                                                                                                                                       
+Faculty         Chairs                                                                                                                                                         
+Faculty         Teaches                                                                                                                                                        
+Faculty         Owns                                                                                                                                                           
+Faculty         Advises                                                                                                                                                        
+Grad_student    Advises                                                                                                                                                        
+Grad_student    TA's                                                                                                                                                           
+Room            Is_Held_In                                                                                                                                                     
+Room            Has_Dorm                                                                                                                                                       
+
+14 rows selected.
+
+SQL> 
+SQL> ------------------------------------------------------------------------------------
+SQL> 
+SQL> 
+SQL> --Query 6
+SQL> --6. Print the name of all entities that have at least one attributes with the data type “Date”
+SQL> select distinct ename
+  2  	     from contains
+  3  	     where lower(cn_datatype)='date';
+
+ENAME                                                                                                                                                                          
+---------------                                                                                                                                                                
+Section                                                                                                                                                                        
+Person                                                                                                                                                                         
+Grant                                                                                                                                                                          
+
+SQL> 
+SQL> ------------------------------------------------------------------------------------
+SQL> 
+SQL> 
+SQL> --Query 7
+SQL> --7. For all attributes that use a domain, print the name the attribute,
+SQL> --the name of the domain, and the data type of the domain (one line per attribute).
+SQL> select aname, cn_domain, cn_datatype
+  2  	     from contains
+  3  	     where lower(cn_domain) is not null
+  4  	     order by aname;
+
+ANAME           CN_DOMAIN            CN_DATATYPE                                                                                                                               
+--------------- -------------------- ---------------                                                                                                                           
+Age             num                  Integer                                                                                                                                   
+Amt             Num                  Integer                                                                                                                                   
+C#              Num                  Integer                                                                                                                                   
+CLName          Text                 carchar                                                                                                                                   
+CName           Short_Text           varchar                                                                                                                                   
+City            short_text           char                                                                                                                                      
+DOB             date                 date                                                                                                                                      
+Dname           Short_Text           char                                                                                                                                      
+No_of_Faculty   Num                  Integer                                                                                                                                   
+RM#             Num                  Integer                                                                                                                                   
+SSN             num                  Integer                                                                                                                                   
+Sec#            Num                  Integer                                                                                                                                   
+Street          short_text           char                                                                                                                                      
+Title           varchar              Text                                                                                                                                      
+Zip             Num                  Integer                                                                                                                                   
+
+15 rows selected.
+
+SQL> 
+SQL> --15 rows returned
+SQL> 
+SQL> ------------------------------------------------------------------------------------
+SQL> 
+SQL> --Query 8
+SQL> --8. Print the name of any attribute, entity, relationship, or specialization
+SQL> --that has either lowercase “r” or uppercase “R” somewhere in their name.
+SQL> --For example, if an entity has the name “Project”, your query will print a line
+SQL> --as “Project   Entity”, and if a relationship has the name Refers”, your query
+SQL> --also prints a line as “Refers	     Relationship”.
+SQL> ----------------------------
+SQL> select concat(ename,'Entity')
+  2  	     From entity_type
+  3  	     Where lower(ename) like '%r%'
+  4  union
+  5  select concat(aname,'Attribute')
+  6  	     From attr_type
+  7  	     Where lower(aname) like '%r%'
+  8  union
+  9  select concat(rname,'Relationship')
+ 10  	     From rel_type
+ 11  	     Where lower(rname) like '%r%'
+ 12  union
+ 13  	     select concat(sname,'Specialization')
+ 14  		     From specialization
+ 15  	     Where lower(sname) like '%r%';
+
+CONCAT(ENAME,'ENTITY')                                                                                                                                                         
+-----------------------------                                                                                                                                                  
+Chairs         Relationship                                                                                                                                                    
+Course         Entity                                                                                                                                                          
+Degree         Attribute                                                                                                                                                       
+Department     Entity                                                                                                                                                          
+Grad_student   Entity                                                                                                                                                          
+Grade          Attribute                                                                                                                                                       
+Grant          Entity                                                                                                                                                          
+Has_Dorm       Relationship                                                                                                                                                    
+Is_tenured     Attribute                                                                                                                                                       
+Offers         Relationship                                                                                                                                                    
+Person         Entity                                                                                                                                                          
+RM#            Attribute                                                                                                                                                       
+Registers_for  Relationship                                                                                                                                                    
+Room           Entity                                                                                                                                                          
+Salary         Attribute                                                                                                                                                       
+Street         Attribute                                                                                                                                                       
+Works_in       Relationship                                                                                                                                                    
+
+17 rows selected.
+
+SQL> 
+SQL> --answer returns 17 rows
+SQL> 
+SQL> ------------------------------------------------------------------------------------
+SQL> 
+SQL> 
+SQL> --Query 9
+SQL> --Print the name of entities that participate in at least 2
+SQL> --relationships with cardinality of 1 or
+SQL> --2 relationships with cardinality M on the end that connects to the --entity.
+SQL> select distinct ename
+  2  	     from relates
+  3  	     where lower(rl_card)='1'
+  4  	     group by ename
+  5  	     having count (ename)>1
+  6  -- this selects entiry with two or more card 1
+  7  union
+  8  	     select distinct ename
+  9  	     from relates
+ 10  	     where lower(rl_card)='m'
+ 11  	     group by ename
+ 12  	     having count (ename)=2;
+
+ENAME                                                                                                                                                                          
+---------------                                                                                                                                                                
+College                                                                                                                                                                        
+Course                                                                                                                                                                         
+Department                                                                                                                                                                     
+Faculty                                                                                                                                                                        
+Grad_student                                                                                                                                                                   
+Room                                                                                                                                                                           
+
+6 rows selected.
+
+SQL> --this selects entities with two card M
+SQL> 
+SQL> 
+SQL> ------------------------------------------------------------------------------------
+SQL> 
+SQL> --Query 10
+SQL> --10. Print the name of each entity that has a Pkey with the name(s)
+SQL> --of the attribute(s) that form the Pkey
+SQL> select ename, aname
+  2  from contains
+  3  where lower(cn_keytype)='pk'
+  4  order by ename;
+
+ENAME           ANAME                                                                                                                                                          
+--------------- ---------------                                                                                                                                                
+College         CLName                                                                                                                                                         
+Course          C#                                                                                                                                                             
+Department      Dname                                                                                                                                                          
+Person          SSN                                                                                                                                                            
+Room            RM#                                                                                                                                                            
+Section         Sec#                                                                                                                                                           
+
+6 rows selected.
+
+SQL> 
+SQL> ------------------------------------------------------------------------------------
+SQL> 
+SQL> --Query 11
+SQL> --11. Print the names of all derived and base attributes and the data type of the --each.
+SQL> --For example, if Age is derived from DOB and the data type of Age is Number(2)
+SQL> --and the data type of DOB is Date, you need to print: Age Number(2) DOB  Date
+SQL> select dv.aname, dv.dv_datatype, cn.aname,cn.cn_datatype
+  2  from derives dv, contains cn
+  3  where dv.att_aname=cn.aname;
+
+ANAME           DV_DATATYPE     ANAME           CN_DATATYPE                                                                                                                    
+--------------- --------------- --------------- ---------------                                                                                                                
+Age             Num             DOB             date                                                                                                                           
+
+SQL> 
+SQL> ------------------------------------------------------------------------------------
+SQL> 
+SQL> --Query 12
+SQL> 
+SQL> --Print the name of all composite attributes and their component
+SQL> --attributes for those composite attributes that have one component
+SQL> --attributes is defined on a domain.
+SQL> select att_aname, aname
+  2  from is_in
+  3  where ii_domain is not null;
+
+ATT_ANAME       ANAME                                                                                                                                                          
+--------------- ---------------                                                                                                                                                
+Name            Fname                                                                                                                                                          
+Name            Lname                                                                                                                                                          
+
+SQL> 
+SQL> 
+SQL> ------------------------------------------------------------------------------------
+SQL> 
+SQL> --13. Print the name of each specialization, its type (Overlapping or Disjoint),
+SQL> --and its super type and sub-type entity names. For example, if we have an --overlapping
+SQL> --specialization S1 with E1 as the super type, E2 and E3 as the subtypes,
+SQL> --then you will print:
+SQL> --E1 S1 Overlapping E2
+SQL> --E1 S1 Overlapping E3
+SQL> select sp.Ename, sp.sname,concat('Overlapping   ',sb.ename)Ename
+  2  	     from specialization sp, sub sb
+  3  	     where sp.soverlapping='1'
+  4  		     and   sp.sname=sb.sname
+  5  union
+  6  	     select sp.Ename, sp.sname,concat('Disjoint      ',sb.ename)Ename
+  7  	     from specialization sp, sub sb
+  8  	     where sp.soverlapping='0'
+  9  		     and   sp.sname=sb.sname;
+
+ENAME           SNAME           ENAME                                                                                                                                          
+--------------- --------------- -----------------------------                                                                                                                  
+Person          ISA             Overlapping   Faculty                                                                                                                          
+Person          ISA             Overlapping   Student                                                                                                                          
+Student         Must_be         Disjoint  	Grad_student                                                                                                                        
+Student         Must_be         Disjoint  	UG_student                                                                                                                          
+
+SQL> 
+SQL> ------------------------------------------------------------------------------------
+SQL> 
+SQL> --14. Print the name of all specialization, their super type entity,
+SQL> --and the super type entity attribute names (one line per entity and attribute combination).
+SQL> --For example, if we have specialization S1 with E1that has attributes A1 and A2 as
+SQL> --the super --type, then you will print:
+SQL> 	--S1 E1 A1
+SQL>   --S1 E1 A2
+SQL> select s.sname, s.ename,cn.aname
+  2  from specialization s, contains cn
+  3  where lower(s.ename)=lower(cn.ename)
+  4  order by s.sname;
+
+SNAME           ENAME           ANAME                                                                                                                                          
+--------------- --------------- ---------------                                                                                                                                
+ISA             Person          Age                                                                                                                                            
+ISA             Person          City                                                                                                                                           
+ISA             Person          DOB                                                                                                                                            
+ISA             Person          Name                                                                                                                                           
+ISA             Person          SSN                                                                                                                                            
+ISA             Person          State                                                                                                                                          
+ISA             Person          Street                                                                                                                                         
+ISA             Person          Zip                                                                                                                                            
+Must_be         Student         Degree                                                                                                                                         
+
+9 rows selected.
+
+SQL> 
+SQL> 
+SQL> ------------------------------------------------------------------------------------
+SQL> 
+SQL> --mark? - how do we print the hierarchy he is talking about below?
+SQL> 
+SQL> --15. Print the name of all specialization, their subtype entity, and
+SQL> --the subtype entity attribute names (one line per entity and attribute --combination).
+SQL> --For example, if we have specialization S1 with E2 as one subtype with attributes
+SQL> --A3 and A4 and E3 as the other subtype with attribute A5, then you will print:
+SQL> 	--S1 E2 A3
+SQL> 	   --S1 E2 A4
+SQL> 	   --S1 E3 A5
+SQL> select s.sname, s.ename,cn.aname
+  2  from  sub s, contains cn
+  3  where lower(s.ename)=lower(cn.ename)
+  4  order by s.sname;
+
+SNAME           ENAME           ANAME                                                                                                                                          
+--------------- --------------- ---------------                                                                                                                                
+ISA             Student         Degree                                                                                                                                         
+ISA             Faculty         Salary                                                                                                                                         
+ISA             Faculty         Is_tenured                                                                                                                                     
+
+SQL> spool off;

@@ -1,13 +1,30 @@
+spool DOCUMENTS/PROJECT_QUERIES_07.txt
+/* GROUP 07                                     */
+/* Mark Norgren, Faisal Ahmed, Mohammad Rahman  */
+/* Project Queries SEIS630 - Fall 2010          */
+-------------------------------------------------------------------------------
+Set echo on;
+set pagesize 160;
+set linesize 175;
+
+
 --Query 1
+--1.For relationships that connect more than two entities, 
+--  print the relationship name and the entities they relate. 
+-- hint: Your statement must count the number of entities that are connected to 
+-- a relationship as opposed to using the value of the type attribute.
 
 select rname, ename from relates where rname = (	
  	select rname from relates group by rname having count(rname)>2
 );
 
 
-------------------------------------------------------------------------------------
-
+-------------------------------------------------------------------------------
 --Query 2
+--2.Print the name of all relationships of degree three and the three entities 
+--they relate. In this case, extra credit will be given if the name of the 
+--relationship and the three entity names are printed on one line. Answers that 
+--use three lines are accepted
 
 select rname, ename 
 	from relates 
@@ -19,6 +36,12 @@ select rname, ename
 	);
 
 --Extra Credit - Display this all on one line.
+COLUMN Entities FORMAT A50;          
+SELECT rname, wm_concat(ename) AS Entities
+FROM   relates
+GROUP BY rname
+having count(rname)=3;
+
 ------------------------------------------------------------------------------------
 
 
@@ -27,15 +50,6 @@ select rname, ename
 --Print the name of all binary relationships that have a cardinality --of M-to-M and have max
 --cardinality of M.
 
---All binary relationships
-select rname from relates group by rname having count(rname)=2;
-
-SELECT lower(RNAME)
-FROM   RELATES
-WHERE upper(RL_CARD)='M'
-GROUP BY lower(RNAME)
-HAVING COUNT (lower(RNAME))=2;
-
 SELECT DISTINCT R.RNAME
 FROM   RELATES RL, REL_TYPE R
 WHERE LOWER(R.RTYPE)='binary'
@@ -43,33 +57,20 @@ WHERE LOWER(R.RTYPE)='binary'
  		AND	LOWER(RL.RL_MAX_CARD)='m'
  		AND	RL.RNAME=R.RNAME;
 
---This top block finds all binary relationships
-SELECT rname
-FROM relates
-WHERE lower(RL_MAX_CARD) = 'm'
-GROUP BY rname	
-HAVING count(rname)=2
-	MINUS
-		SELECT DISTINCT rname
-		FROM relates
-		WHERE lower(rl_card)<>'m';
-
---This block finds relationships that are not M
-
---AND with max cardinality of M
-
 ------------------------------------------------------------------------------------
 
 
 --Query 4
---4. For entities that have two or three attributes, print the name --of the entity and its attributes.
+--4. For entities that have two or three attributes, print the name 
+--of the entity and its attributes.
 SELECT ename, aname
 FROM contains
-WHERE ename IN( select ename
+WHERE ename IN(
+				select ename
             	from contains
             	group by ename
             	having count(ename)=any(2,3)
-            	)
+				)
 order by ename;
 
 ------------------------------------------------------------------------------------
@@ -79,7 +80,8 @@ order by ename;
 --5. Print the name of all entities that participate in 2, 3, or 5 relationships.
 select ename, rname
 	from relates
-	where ename in( select ename
+	where ename in( 
+					select ename
 					from relates
 					group by ename
 					having count(ename)=any(2,3,5)
@@ -131,8 +133,6 @@ union
 		From specialization
 	Where lower(sname) like '%r%';
 
---answer returns 17 rows
-
 ------------------------------------------------------------------------------------
 
 
@@ -141,17 +141,17 @@ union
 --relationships with cardinality of 1 or 
 --2 relationships with cardinality M on the end that connects to the --entity.
 select distinct ename 
-from relates
-where lower(rl_card)='1'
-group by ename
-having count (ename)>1 
+	from relates
+	where lower(rl_card)='1'
+	group by ename
+	having count (ename)>1 
 -- this selects entiry with two or more card 1
 union
-select distinct ename 
-from relates
-where lower(rl_card)='m'
-group by ename
-having count (ename)=2;  
+	select distinct ename 
+	from relates
+	where lower(rl_card)='m'
+	group by ename
+	having count (ename)=2;  
 --this selects entities with two card M
 
 
@@ -196,28 +196,27 @@ where ii_domain is not null;
 --E1 S1 Overlapping E2
 --E1 S1 Overlapping E3
 select sp.Ename, sp.sname,concat('Overlapping   ',sb.ename)Ename
-from specialization sp, sub sb
-where sp.soverlapping='1'
-and   sp.sname=sb.sname
+	from specialization sp, sub sb
+	where sp.soverlapping='1'
+		and   sp.sname=sb.sname
 union
-select sp.Ename, sp.sname,concat('Disjoint  	',sb.ename)Ename
-from specialization sp, sub sb
-where sp.soverlapping='0'
-and   sp.sname=sb.sname;
+	select sp.Ename, sp.sname,concat('Disjoint  	',sb.ename)Ename
+	from specialization sp, sub sb
+	where sp.soverlapping='0'
+		and   sp.sname=sb.sname;
 
 ------------------------------------------------------------------------------------
 
 --14. Print the name of all specialization, their super type entity,
---and the super type entity attribute names (one line per entity and attribute --combination).
---For example, if we have specialization S1 with E1that has attributes A1 and A2 as the super --type,
---then you will print:
+--and the super type entity attribute names (one line per entity and attribute combination).
+--For example, if we have specialization S1 with E1that has attributes A1 and A2 as 
+--the super --type, then you will print:
    --S1 E1 A1
   --S1 E1 A2
 select s.sname, s.ename,cn.aname
 from specialization s, contains cn
 where lower(s.ename)=lower(cn.ename)
 order by s.sname;
-
 
 ------------------------------------------------------------------------------------
 
@@ -234,3 +233,4 @@ select s.sname, s.ename,cn.aname
 from  sub s, contains cn
 where lower(s.ename)=lower(cn.ename)
 order by s.sname;
+spool off;
