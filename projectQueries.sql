@@ -1,4 +1,4 @@
-spool DOCUMENTS/PROJECT_QUERIES_07.txt
+spool DOCUMENTS/projectQueries_Team07.txt
 /* GROUP 07                                     */
 /* Mark Norgren, Faisal Ahmed, Mohammad Rahman  */
 /* Project Queries SEIS630 - Fall 2010          */
@@ -8,32 +8,47 @@ set pagesize 160;
 set linesize 175;
 
 
+--display all tables
+select * from relates;
+select * from is_used_by;
+select * from contains;
+select * from sub;
+select * from specialization;
+select * from rel_type;
+select * from is_in;
+select * from entity_type;
+select * from derives;
+select * from attr_type;
+
+
 --Query 1
 --1.For relationships that connect more than two entities, 
 --  print the relationship name and the entities they relate. 
 -- hint: Your statement must count the number of entities that are connected to 
 -- a relationship as opposed to using the value of the type attribute.
 
-select rname, ename from relates where rname = (	
- 	select rname from relates group by rname having count(rname)>2
-);
-
-
+select rname, ename
+from relates 
+where rname IN (	
+                    select rname 
+                    from relates 
+                    group by rname 
+                    having count(rname)>2
+                  );
 -------------------------------------------------------------------------------
 --Query 2
 --2.Print the name of all relationships of degree three and the three entities 
 --they relate. In this case, extra credit will be given if the name of the 
 --relationship and the three entity names are printed on one line. Answers that 
 --use three lines are accepted
-
 select rname, ename 
 	from relates 
-	where rname = (	
-					select rname 
-					from relates 
-					group by rname 
-					having count(rname)=3
-	);
+	where rname in (	
+                  select rname 
+                  from relates 
+                  group by rname 
+                  having count(rname)=3
+                  );
 
 --Extra Credit - Display this all on one line.
 COLUMN Entities FORMAT A50;          
@@ -45,7 +60,6 @@ having count(rname)=3;
 ------------------------------------------------------------------------------------
 
 
-
 --Query 3 (need verification)
 --Print the name of all binary relationships that have a cardinality --of M-to-M and have max
 --cardinality of M.
@@ -53,9 +67,14 @@ having count(rname)=3;
 SELECT DISTINCT R.RNAME
 FROM   RELATES RL, REL_TYPE R
 WHERE LOWER(R.RTYPE)='binary'
- 		AND	LOWER(RL.RL_CARD)='m'
+ 		AND	LOWER(RL.RL_CARD)='m'        --This will allow card other than m in one side
  		AND	LOWER(RL.RL_MAX_CARD)='m'
- 		AND	RL.RNAME=R.RNAME;
+ 		AND	RL.RNAME=R.RNAME             --select binary relations with max cardinality m
+minus                           
+	select rname                      --select binary relation with no m on any side
+	from relates
+	where lower(rl_card)<>'m';
+ 
 
 ------------------------------------------------------------------------------------
 
@@ -154,7 +173,6 @@ union
 	having count (ename)=2;  
 --this selects entities with two card M
 
-
 ------------------------------------------------------------------------------------
 
 --Query 10
@@ -178,7 +196,6 @@ where dv.att_aname=cn.aname;
 ------------------------------------------------------------------------------------
 
 --Query 12
-
 --Print the name of all composite attributes and their component 
 --attributes for those composite attributes that have one component 
 --attributes is defined on a domain.
@@ -219,8 +236,6 @@ where lower(s.ename)=lower(cn.ename)
 order by s.sname;
 
 ------------------------------------------------------------------------------------
-
---mark? - how do we print the hierarchy he is talking about below?
 
 --15. Print the name of all specialization, their subtype entity, and
 --the subtype entity attribute names (one line per entity and attribute --combination).

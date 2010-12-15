@@ -7,45 +7,224 @@ SQL> set pagesize 160;
 SQL> set linesize 175;
 SQL> 
 SQL> 
+SQL> --display all tables
+SQL> select * from relates;
+
+ENAME           RNAME           RL_ROLE         R RL RL                                                                                                                        
+--------------- --------------- --------------- - -- --                                                                                                                        
+Faculty         Works_in        Faculty         M                                                                                                                              
+Faculty         Chairs          Faculty         1 1  1                                                                                                                         
+Faculty         Teaches         Faculty         1                                                                                                                              
+Faculty         Owns            Faculty         M                                                                                                                              
+Faculty         Advises         Faculty         1                                                                                                                              
+Grant           Owns            Grant           M                                                                                                                              
+Grant           Advises         Grant           M                                                                                                                              
+Grant           Consists        CG              M                                                                                                                              
+Grant           Consists        PG              1                                                                                                                              
+Grad_student    Advises         Grad_student    M                                                                                                                              
+Grad_student    TA's            Grad_student    M 1  M                                                                                                                         
+UG_student      Has_Dorm        UG_student      M                                                                                                                              
+Student         Registers_for   Registers       M                                                                                                                              
+Section         Registers_for   Section         M                                                                                                                              
+Section         Is_Held_In      Section         M                                                                                                                              
+Section         TA's            Section         M                                                                                                                              
+Section         Has             Section         M                                                                                                                              
+Room            Is_Held_In      Room            1                                                                                                                              
+Room            Has_Dorm        Room            1                                                                                                                              
+Course          Has             Course          1                                                                                                                              
+Course          Teaches         Course          M                                                                                                                              
+Course          Offers          Course          M                                                                                                                              
+Department      Offers          Department      M                                                                                                                              
+Department      Is_within       Department      M                                                                                                                              
+Department      Works_in        Department      1                                                                                                                              
+Department      Chairs          Department      1                                                                                                                              
+College         Is_within       College         1                                                                                                                              
+College         Has_Dean        College         1                                                                                                                              
+Person          Has_Dean        Person          1                                                                                                                              
+
+29 rows selected.
+
+SQL> select * from is_used_by;
+
+RNAME           ANAME           IU_DATATYPE     IU_DOMAIN             IU_LENGTH IU_PRECISION   IU_SCALE I                                                                      
+--------------- --------------- --------------- -------------------- ---------- ------------ ---------- -                                                                      
+Registers_for   Date            Date                                                                                                                                           
+Registers_for   Grade           char            Grade                         2                                                                                                
+TA's            Salary          Decimal                                      10           10          2                                                                        
+
+SQL> select * from contains;
+
+ANAME           ENAME           CN_DATATYPE     CN_DOMAIN            C CN_KEYTYPE  CN_LENGTH CN_PRECISION   CN_SCALE C                                                         
+--------------- --------------- --------------- -------------------- - ---------- ---------- ------------ ---------- -                                                         
+SSN             Person          Integer         num                  y PK                  9                                                                                   
+Age             Person          Integer         num                  n                                                                                                         
+DOB             Person          date            date                 n                                                                                                         
+Name            Person          varchar                              n                    21                         y                                                         
+Street          Person          char            short_text           n                    10                                                                                   
+City            Person          char            short_text           n                    10                                                                                   
+State           Person          char                                 n                     2                                                                                   
+Zip             Person          Integer         Num                  n                     5                                                                                   
+Degree          Student         char                                 n                     3                         y                                                         
+Salary          Faculty         decimal                              n                    10           10          2                                                           
+Is_tenured      Faculty         boolean                              n                                                                                                         
+Date            Grant           Date                                 n                                                                                                         
+Title           Grant           Text            varchar              y Text               27                                                                                   
+Amt             Grant           Integer         Num                  n                    20           20          2                                                           
+Date            Section         Date                                 n                                                                                                         
+Sec#            Section         Integer         Num                  y PK                                                                                                      
+RM#             Room            Integer         Num                  y PK                                                                                                      
+C#              Course          Integer         Num                  y PK                  4                                                                                   
+CName           Course          varchar         Short_Text           y CK                 10                                                                                   
+Dname           Department      char            Short_Text           y PK                                                                                                      
+No_of_Faculty   Department      Integer         Num                  n                                                                                                         
+CLName          College         carchar         Text                 y PK                 27                                                                                   
+
+22 rows selected.
+
+SQL> select * from sub;
+
+ENAME           SNAME                                                                                                                                                          
+--------------- ---------------                                                                                                                                                
+Faculty         ISA                                                                                                                                                            
+Grad_student    Must_be                                                                                                                                                        
+Student         ISA                                                                                                                                                            
+UG_student      Must_be                                                                                                                                                        
+
+SQL> select * from specialization;
+
+SNAME           ENAME           S S                                                                                                                                            
+--------------- --------------- - -                                                                                                                                            
+ISA             Person            1                                                                                                                                            
+Must_be         Student         1 0                                                                                                                                            
+
+SQL> select * from rel_type;
+
+RNAME           RTYPE                                                                                                                                                          
+--------------- ----------                                                                                                                                                     
+Advises         Ternary                                                                                                                                                        
+Registers_for   Binary                                                                                                                                                         
+TA's            Binary                                                                                                                                                         
+Owns            Binary                                                                                                                                                         
+Has             binary                                                                                                                                                         
+Is_Held_In      Binary                                                                                                                                                         
+Has_Dorm        Binary                                                                                                                                                         
+Offers          Binary                                                                                                                                                         
+Works_in        Binary                                                                                                                                                         
+Chairs          Binary                                                                                                                                                         
+Teaches         Binary                                                                                                                                                         
+Is_within       Binary                                                                                                                                                         
+Consists        Binary                                                                                                                                                         
+Has_Dean        Binary                                                                                                                                                         
+
+14 rows selected.
+
+SQL> select * from is_in;
+
+ANAME           ATT_ANAME       II_DATATYPE     II_DOMAIN             II_LENGTH II_PRECISION   II_SCALE                                                                        
+--------------- --------------- --------------- -------------------- ---------- ------------ ----------                                                                        
+Fname           Name            char            short_text                   10                                                                                                
+Minit           Name            char                                          1                                                                                                
+Lname           Name            char            short_text                   10                                                                                                
+
+SQL> select * from entity_type;
+
+ENAME                                                                                                                                                                          
+---------------                                                                                                                                                                
+College                                                                                                                                                                        
+Course                                                                                                                                                                         
+Department                                                                                                                                                                     
+Faculty                                                                                                                                                                        
+Grad_student                                                                                                                                                                   
+Grant                                                                                                                                                                          
+Person                                                                                                                                                                         
+Room                                                                                                                                                                           
+Section                                                                                                                                                                        
+Student                                                                                                                                                                        
+UG_student                                                                                                                                                                     
+
+11 rows selected.
+
+SQL> select * from derives;
+
+ANAME           ATT_ANAME       DV_DATATYPE     DV_DOMAIN             DV_LENGTH DV_PRECISION   DV_SCALE                                                                        
+--------------- --------------- --------------- -------------------- ---------- ------------ ----------                                                                        
+Age             DOB             Num             Num                                                                                                                            
+
+SQL> select * from attr_type;
+
+ANAME                                                                                                                                                                          
+---------------                                                                                                                                                                
+Age                                                                                                                                                                            
+Amt                                                                                                                                                                            
+C#                                                                                                                                                                             
+CLName                                                                                                                                                                         
+CName                                                                                                                                                                          
+City                                                                                                                                                                           
+DOB                                                                                                                                                                            
+Date                                                                                                                                                                           
+Degree                                                                                                                                                                         
+Dname                                                                                                                                                                          
+Fname                                                                                                                                                                          
+Grade                                                                                                                                                                          
+Is_tenured                                                                                                                                                                     
+Lname                                                                                                                                                                          
+Minit                                                                                                                                                                          
+Name                                                                                                                                                                           
+No_of_Faculty                                                                                                                                                                  
+RM#                                                                                                                                                                            
+SSN                                                                                                                                                                            
+Salary                                                                                                                                                                         
+Sec#                                                                                                                                                                           
+State                                                                                                                                                                          
+Street                                                                                                                                                                         
+Title                                                                                                                                                                          
+Zip                                                                                                                                                                            
+
+25 rows selected.
+
+SQL> 
+SQL> 
 SQL> --Query 1
 SQL> --1.For relationships that connect more than two entities,
 SQL> --  print the relationship name and the entities they relate.
 SQL> -- hint: Your statement must count the number of entities that are connected to
 SQL> -- a relationship as opposed to using the value of the type attribute.
 SQL> 
-SQL> select rname, ename from relates where rname = (
-  2  	     select rname from relates group by rname having count(rname)>2
-  3  );
+SQL> select rname, ename
+  2  from relates
+  3  where rname IN (
+  4  			 select rname
+  5  			 from relates
+  6  			 group by rname
+  7  			 having count(rname)>2
+  8  		       );
 
 RNAME           ENAME                                                                                                                                                          
 --------------- ---------------                                                                                                                                                
-Advises         Faculty                                                                                                                                                        
 Advises         Grad_student                                                                                                                                                   
 Advises         Grant                                                                                                                                                          
+Advises         Faculty                                                                                                                                                        
 
-SQL> 
-SQL> 
 SQL> -------------------------------------------------------------------------------
 SQL> --Query 2
 SQL> --2.Print the name of all relationships of degree three and the three entities
 SQL> --they relate. In this case, extra credit will be given if the name of the
 SQL> --relationship and the three entity names are printed on one line. Answers that
 SQL> --use three lines are accepted
-SQL> 
 SQL> select rname, ename
   2  	     from relates
-  3  	     where rname = (
-  4  					     select rname
-  5  					     from relates
-  6  					     group by rname
-  7  					     having count(rname)=3
-  8  	     );
+  3  	     where rname in (
+  4  		       select rname
+  5  		       from relates
+  6  		       group by rname
+  7  		       having count(rname)=3
+  8  		       );
 
 RNAME           ENAME                                                                                                                                                          
 --------------- ---------------                                                                                                                                                
-Advises         Faculty                                                                                                                                                        
 Advises         Grad_student                                                                                                                                                   
 Advises         Grant                                                                                                                                                          
+Advises         Faculty                                                                                                                                                        
 
 SQL> 
 SQL> --Extra Credit - Display this all on one line.
@@ -63,7 +242,6 @@ SQL>
 SQL> ------------------------------------------------------------------------------------
 SQL> 
 SQL> 
-SQL> 
 SQL> --Query 3 (need verification)
 SQL> --Print the name of all binary relationships that have a cardinality --of M-to-M and have max
 SQL> --cardinality of M.
@@ -71,14 +249,19 @@ SQL>
 SQL> SELECT DISTINCT R.RNAME
   2  FROM   RELATES RL, REL_TYPE R
   3  WHERE LOWER(R.RTYPE)='binary'
-  4  		     AND     LOWER(RL.RL_CARD)='m'
+  4  		     AND     LOWER(RL.RL_CARD)='m'	  --This will allow card other than m in one side
   5  		     AND     LOWER(RL.RL_MAX_CARD)='m'
-  6  		     AND     RL.RNAME=R.RNAME;
+  6  		     AND     RL.RNAME=R.RNAME		  --select binary relations with max cardinality m
+  7  minus
+  8  	     select rname		       --select binary relation with no m on any side
+  9  	     from relates
+ 10  	     where lower(rl_card)<>'m';
 
 RNAME                                                                                                                                                                          
 ---------------                                                                                                                                                                
 TA's                                                                                                                                                                           
 
+SQL> 
 SQL> 
 SQL> ------------------------------------------------------------------------------------
 SQL> 
@@ -112,8 +295,6 @@ Section         Sec#
 
 11 rows selected.
 
-SQL> 
-SQL> --returns 11 rows
 SQL> 
 SQL> ------------------------------------------------------------------------------------
 SQL> 
@@ -198,8 +379,6 @@ Zip             Num                  Integer
 15 rows selected.
 
 SQL> 
-SQL> --15 rows returned
-SQL> 
 SQL> ------------------------------------------------------------------------------------
 SQL> 
 SQL> --Query 8
@@ -248,8 +427,6 @@ Works_in       Relationship
 17 rows selected.
 
 SQL> 
-SQL> --answer returns 17 rows
-SQL> 
 SQL> ------------------------------------------------------------------------------------
 SQL> 
 SQL> 
@@ -282,7 +459,6 @@ Room
 6 rows selected.
 
 SQL> --this selects entities with two card M
-SQL> 
 SQL> 
 SQL> ------------------------------------------------------------------------------------
 SQL> 
@@ -324,7 +500,6 @@ SQL>
 SQL> ------------------------------------------------------------------------------------
 SQL> 
 SQL> --Query 12
-SQL> 
 SQL> --Print the name of all composite attributes and their component
 SQL> --attributes for those composite attributes that have one component
 SQL> --attributes is defined on a domain.
@@ -393,10 +568,7 @@ Must_be         Student         Degree
 9 rows selected.
 
 SQL> 
-SQL> 
 SQL> ------------------------------------------------------------------------------------
-SQL> 
-SQL> --mark? - how do we print the hierarchy he is talking about below?
 SQL> 
 SQL> --15. Print the name of all specialization, their subtype entity, and
 SQL> --the subtype entity attribute names (one line per entity and attribute --combination).
